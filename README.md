@@ -1,6 +1,10 @@
 ## windows-audio-devices
 On Windows 7 and superior, get a native alternative to `navigator.mediaDevices.enumerateDevices()` to get audio capture and render devices.
 ```
+npm install windows-audio-devices
+```
+
+```
 const { getAudioDevices } = require('windows-audio-devices')
 const audioDevicesArray = getAudioDevices()
 ```

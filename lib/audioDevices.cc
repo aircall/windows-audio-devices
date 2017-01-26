@@ -162,7 +162,7 @@ _handleError:
 void init(Handle<Object> exports) {
   Isolate *isolate = Isolate::GetCurrent();
 
-  exports->Set(String::NewFromUtf8(isolate, "getAudioEndpoint"),
+  exports->Set(String::NewFromUtf8(isolate, "getAudioDevices"),
                FunctionTemplate::New(isolate, Method)->GetFunction());
 }
 
