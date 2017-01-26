@@ -4,7 +4,7 @@
   "description": "Get capture and render audio devices for Windows 7 and superior",
   "main": "lib/index.js",
   "scripts": {
-    "test": "standard && node ./test/test.js"
+    "test": "standard"
   },
   "dependencies": {
     "bindings": "^1.2.1",
@@ -15,6 +15,13 @@
     "name": "Maxence HALTEL",
     "url": ["http://www.aircall.io", "http://www.github.com/Shinomix"]
   },
+  "repository": "http://github.com/aircall/windows-audio-devices",
   "license": "MIT",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/aircall/windows-audio-devices/blob/master/LICENSE"
+    }
+  ],
   "gypfile": true
 }
