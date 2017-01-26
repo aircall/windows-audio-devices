@@ -1,0 +1,20 @@
+{
+  "name": "windows-audio-devices",
+  "version": "1.0.0",
+  "description": "Get capture and render audio devices for Windows 7 and superior",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "standard && node ./test/test.js"
+  },
+  "dependencies": {
+    "bindings": "^1.2.1",
+    "nan": "^2.5.1"
+  },
+  "author": {
+    "email": ["maxence@aircall.io", "maxence.haltel@gmail.com"],
+    "name": "Maxence HALTEL",
+    "url": ["http://www.aircall.io", "http://www.github.com/Shinomix"]
+  },
+  "license": "MIT",
+  "gypfile": true
+}
