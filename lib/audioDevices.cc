@@ -23,7 +23,7 @@ const IID IID_IMMDeviceEnumerator = __uuidof(IMMDeviceEnumerator);
 #ifdef _WIN32
 boolean ExtractDataFromCollection(
   Isolate *isolate,
-  IMMDeviceCollection *collection, UINT dataLength,
+  IMMDeviceCollection *collection, UINT dataLength, char* kind,
   IMMDevice *pDefaultDevice,
   Local<Array> &results, UINT &accessor
 ) {
@@ -47,6 +47,7 @@ boolean ExtractDataFromCollection(
         return false;
     hr = pEndpoint->GetId(&itemId);
     obj->Set(String::NewFromUtf8(isolate, "default"), Boolean::New(isolate, wcscmp(itemId, deviceId) == 0));
+    obj->Set(String::NewFromUtf8(isolate, "kind"), String::NewFromUtf8(isolate, kind));
 
     hr = pEndpoint->OpenPropertyStore(STGM_READ, &pProps);
     if (FAILED(hr))
@@ -125,7 +126,7 @@ void Method(const v8::FunctionCallbackInfo<Value>& args) {
   hr = pEnumerator->GetDefaultAudioEndpoint(eCapture, eConsole, &pDefaultCaptureDevice);
   if (!FAILED(hr) && !FAILED(hrCapture))
     if (ExtractDataFromCollection(isolate,
-                                  pCaptureCollection, countCapture,
+                                  pCaptureCollection, countCapture, "audioinput",
                                   pDefaultCaptureDevice,
                                   resultsArray, accessor
                                   ) == false)
@@ -136,7 +137,7 @@ void Method(const v8::FunctionCallbackInfo<Value>& args) {
   hr = pEnumerator->GetDefaultAudioEndpoint(eRender, eConsole, &pDefaultRenderDevice);
   if (!FAILED(hr) && !FAILED(hrRender))
     if (ExtractDataFromCollection(isolate,
-                                  pRenderCollection, countRender,
+                                  pRenderCollection, countRender, "audiooutput",
                                   pDefaultRenderDevice,
                                   resultsArray, accessor
                                   ) == false)

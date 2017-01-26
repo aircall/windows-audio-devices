@@ -7,6 +7,7 @@ const audioDevicesArray = getAudioDevices()
 Returns an array of objects structured as below:
 ```
 {
+  "kind": "'audioinput' or 'audioutput'"
   "device": "Complete device name",
   "friendly": "Shortened friendly name for display",
   "default": "Boolean representing default system choice"
