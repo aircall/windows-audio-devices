@@ -176,11 +176,12 @@ _handleError:
   return;
 }
 
-void init(Handle<Object> exports) {
+void init(Local<Object> exports) {
   Isolate *isolate = Isolate::GetCurrent();
+  Local<Context> context = isolate->GetCurrentContext();
 
   exports->Set(String::NewFromUtf8(isolate, "getAudioDevices"),
-               FunctionTemplate::New(isolate, Method)->GetFunction());
+               FunctionTemplate::New(isolate, Method)->GetFunction(context).ToLocalChecked());
 }
 
 NODE_MODULE(test, init)
