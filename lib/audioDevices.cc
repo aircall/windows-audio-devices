@@ -9,6 +9,16 @@
 #include <atlstr.h>
 #endif
 
+// Lange: Copied from https://chromium.googlesource.com/external/webrtc/+/branch-heads/43/talk/media/devices/win32devicemanager.cc#40
+// There's some conflict I don't understand,
+// the hack is to just define this one symbol manually.
+// See: https://code.google.com/p/webrtc/issues/detail?id=3996
+EXTERN_C const PROPERTYKEY PKEY_AudioEndpoint_GUID = { {
+  0x1da5d803, 0xd492, 0x4edd, {
+    0x8c, 0x23, 0xe0, 0xc0, 0xff, 0xee, 0x7f, 0x0e
+  } }, 4
+};
+
 using namespace v8;
 
 #ifdef _WIN32
@@ -52,6 +62,13 @@ boolean ExtractDataFromCollection(
     hr = pEndpoint->OpenPropertyStore(STGM_READ, &pProps);
     if (FAILED(hr))
       return false;
+
+    PROPVARIANT deviceGuid;
+    PropVariantInit(&deviceGuid);
+    hr = pProps->GetValue(PKEY_AudioEndpoint_GUID, &deviceGuid);
+    if (FAILED(hr))
+      return false;
+    obj->Set(String::NewFromUtf8(isolate, "guid"), String::NewFromUtf8(isolate, CW2A(deviceGuid.pwszVal)));
 
     PROPVARIANT deviceName;
     PropVariantInit(&deviceName);
@@ -159,11 +176,12 @@ _handleError:
   return;
 }
 
-void init(Handle<Object> exports) {
+void init(Local<Object> exports) {
   Isolate *isolate = Isolate::GetCurrent();
+  Local<Context> context = isolate->GetCurrentContext();
 
   exports->Set(String::NewFromUtf8(isolate, "getAudioDevices"),
-               FunctionTemplate::New(isolate, Method)->GetFunction());
+               FunctionTemplate::New(isolate, Method)->GetFunction(context).ToLocalChecked());
 }
 
 NODE_MODULE(test, init)
