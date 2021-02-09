@@ -23,5 +23,6 @@
       "url": "http://github.com/aircall/windows-audio-devices/blob/master/LICENSE"
     }
   ],
-  "gypfile": true
+  "gypfile": true,
+  "typings": "index.d.ts"
 }
