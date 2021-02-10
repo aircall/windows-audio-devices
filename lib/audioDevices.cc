@@ -1,4 +1,5 @@
 #include <node.h>
+#include <nan.h>
 #include <v8.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -46,8 +47,9 @@ boolean ExtractDataFromCollection(
       if (FAILED(hr))
         return false;
     hr = pEndpoint->GetId(&itemId);
-    obj->Set(String::NewFromUtf8(isolate, "default"), Boolean::New(isolate, wcscmp(itemId, deviceId) == 0));
-    obj->Set(String::NewFromUtf8(isolate, "kind"), String::NewFromUtf8(isolate, kind));
+
+    Nan::Set(obj, Nan::New("default").ToLocalChecked(), Boolean::New(isolate, wcscmp(itemId, deviceId) == 0));
+    Nan::Set(obj, Nan::New("kind").ToLocalChecked(), Nan::New(kind).ToLocalChecked());
 
     hr = pEndpoint->OpenPropertyStore(STGM_READ, &pProps);
     if (FAILED(hr))
@@ -58,16 +60,16 @@ boolean ExtractDataFromCollection(
     hr = pProps->GetValue(PKEY_Device_FriendlyName, &deviceName);
     if (FAILED(hr))
       return false;
-    obj->Set(String::NewFromUtf8(isolate, "device"), String::NewFromUtf8(isolate, CW2A(deviceName.pwszVal)));
+    Nan::Set(obj, Nan::New("device").ToLocalChecked(), Nan::New(CW2A(deviceName.pwszVal)).ToLocalChecked());
 
     PROPVARIANT friendlyName;
     PropVariantInit(&friendlyName);
     hr = pProps->GetValue(PKEY_DeviceInterface_FriendlyName, &friendlyName);
     if (FAILED(hr))
       return false;
-    obj->Set(String::NewFromUtf8(isolate, "friendly"), String::NewFromUtf8(isolate, CW2A(friendlyName.pwszVal)));
+    Nan::Set(obj, Nan::New("friendly").ToLocalChecked(), Nan::New(CW2A(friendlyName.pwszVal)).ToLocalChecked());
 
-    results->Set(accessor, obj);
+    Nan::Set(results, accessor, obj);
     accessor++;
   }
   return true;
@@ -159,11 +161,11 @@ _handleError:
   return;
 }
 
-void init(Handle<Object> exports) {
+void init(v8::Local<v8::Object> exports) {
   Isolate *isolate = Isolate::GetCurrent();
 
-  exports->Set(String::NewFromUtf8(isolate, "getAudioDevices"),
-               FunctionTemplate::New(isolate, Method)->GetFunction());
+  Nan::Set(exports, Nan::New("getAudioDevices").ToLocalChecked(),
+               FunctionTemplate::New(isolate, Method)->GetFunction(Nan::GetCurrentContext()).ToLocalChecked());
 }
 
 NODE_MODULE(test, init)

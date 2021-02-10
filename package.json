@@ -1,6 +1,6 @@
 {
   "name": "windows-audio-devices",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Get capture and render audio devices for Windows 7 and superior",
   "main": "lib/index.js",
   "scripts": {
@@ -23,5 +23,6 @@
       "url": "http://github.com/aircall/windows-audio-devices/blob/master/LICENSE"
     }
   ],
-  "gypfile": true
+  "gypfile": true,
+  "typings": "index.d.ts"
 }
